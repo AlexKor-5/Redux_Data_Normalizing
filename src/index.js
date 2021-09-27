@@ -1,17 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react"
+import ReactDOM from "react-dom"
+// import "./index.css"
+import {DataNormalizing} from "./AppDataNormalizing/DataNormalizing"
+import {Provider} from "react-redux"
+import store from "./AppDataNormalizing/store"
+
+const destination = document.querySelector("#container")
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <>
+        <Provider store={store}>
+            <DataNormalizing/>
+        </Provider>
+    </>,
+    destination
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
