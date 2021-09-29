@@ -3,14 +3,15 @@ import {useDispatch, useSelector} from "react-redux"
 import {saveToDo, deleteToDo} from "./reducerSlices/mainReducer"
 import {v4 as uuidv4} from 'uuid'
 import {fetchTodos} from "./reducerSlices/mainReducer"
+import my_todos from "./data-todos"
+import {normalize, schema} from 'normalizr'
+import post from "./data-post"
+import blog from "./data-blog"
 
 export const DataNormalizing = () => {
     const dispatch = useDispatch()
     const todos = useSelector(state => Object.values(state.data.todos))
     const [counter, setCounter] = useState(0)
-
-    console.log(todos)
-
     const addNewToDo = () => {
         dispatch(saveToDo({
             id: uuidv4(),
@@ -18,6 +19,68 @@ export const DataNormalizing = () => {
         }))
         setCounter(prev => prev + 1)
     }
+    // const todosSchema = new schema.Entity('todos')
+    // // console.log(todosSchema)
+    // const normalizedData = normalize(my_todos, todosSchema)
+    const user = new schema.Entity('users');
+
+    const comment = new schema.Entity('comments', {
+        commenter: user
+    });
+
+    const article = new schema.Entity('articles', {
+        author: user,
+        comments: [comment]
+    });
+
+    const normalizedData = normalize(post, article);
+
+///////////////////////////
+    const user2 = new schema.Entity('users');
+
+    const comment2 = new schema.Entity('comments', {
+        commenter2: user2
+    });
+
+    const article2 = new schema.Entity('articles', {
+        author: user2,
+        comments: [comment2]
+    });
+
+    const normalizedData2 = normalize(post, article2);
+
+    console.log(post)
+    console.log(normalizedData)
+    console.log(normalizedData2)
+//////////////////////
+
+    const todo = new schema.Entity('todos');
+
+    const normalized = normalize(my_todos.todos, [todo]);
+
+
+    console.log(my_todos)
+    console.log(normalized)
+    console.clear()
+/////////////////////
+    console.log("initial value = ", blog)
+
+    const _authorPost = new schema.Entity('authorPosts')
+    const _nameCommenter = new schema.Entity('nameCommenters')
+
+    const _commenter = new schema.Entity('commenters')
+
+    const _comment = new schema.Entity('comments', {
+        commenter: _commenter
+    })
+
+    const _post = new schema.Entity('posts', {
+        author: _authorPost,
+        comments: [_comment]
+    })
+
+    const _normalized = normalize(blog.posts, [_post])
+    console.log("result = ", _normalized)
 
     return (
         <>

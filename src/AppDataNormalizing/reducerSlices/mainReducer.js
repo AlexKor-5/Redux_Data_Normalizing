@@ -9,6 +9,14 @@ export const fetchTodos = createAsyncThunk(
     }
 )
 
+// export const fetchAnything = createAsyncThunk(
+//     'todos/fetchAnything',
+//     async () => {
+//         const response = await fetch('https://jsonplaceholder.typicode.com/todos')
+//         return response.json()
+//     }
+// )
+
 const mainReducer = createSlice({
     name: 'todo',
     initialState: data,
