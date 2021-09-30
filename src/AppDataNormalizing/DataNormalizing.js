@@ -4,7 +4,7 @@ import {saveToDo, deleteToDo} from "./reducerSlices/mainReducer"
 import {v4 as uuidv4} from 'uuid'
 import {fetchTodos} from "./reducerSlices/mainReducer"
 import my_todos from "./data-todos"
-import {normalize, schema} from 'normalizr'
+import {denormalize, normalize, schema} from 'normalizr'
 import post from "./data-post"
 import blog from "./data-blog"
 
@@ -52,7 +52,7 @@ export const DataNormalizing = () => {
     console.log(post)
     console.log(normalizedData)
     console.log(normalizedData2)
-//////////////////////
+////////////////////////
 
     const todo = new schema.Entity('todos');
 
@@ -62,12 +62,22 @@ export const DataNormalizing = () => {
     console.log(my_todos)
     console.log(normalized)
     console.clear()
-/////////////////////
+///////////////////////
     console.log("initial value = ", blog)
 
-    const _authorPost = new schema.Entity('authorPosts')
-    const _nameCommenter = new schema.Entity('nameCommenters')
+    blog.posts.forEach((item, i) => {
+        console.log("Blog Text = ", item.text)
+        console.log("Blog Author = ", item.author.name, item.author.surname)
+        console.log("*******Comments*******")
+        blog.posts[i].comments.forEach((elem, y) => {
+            console.log("*** Comment text = ", elem.content)
+            console.log("*** Comment author = ", elem.commenter.name, elem.commenter.surname)
+        })
+        console.log("//****Comments****//")
+        console.log("---------------------------------------------------------------")
+    })
 
+    const _authorPost = new schema.Entity('authorPosts')
     const _commenter = new schema.Entity('commenters')
 
     const _comment = new schema.Entity('comments', {
@@ -81,6 +91,20 @@ export const DataNormalizing = () => {
 
     const _normalized = normalize(blog.posts, [_post])
     console.log("result = ", _normalized)
+    // console.log(_normalized.entities.posts)
+
+    _normalized.result.forEach((item) => {
+        let post = _normalized.entities.posts[item]
+        console.log("Blog Text = ", post.text)
+    })
+    console.clear()
+///////////////////////////////
+    const outData = [{id: '123', name: 'Jim'}, {id: '456', name: 'Jane'}]
+    console.log(outData)
+
+    const outUser = new schema.Entity('users')
+    const normalizedOutData = normalize(outData, [outUser])
+    console.log(normalizedOutData)
 
     return (
         <>

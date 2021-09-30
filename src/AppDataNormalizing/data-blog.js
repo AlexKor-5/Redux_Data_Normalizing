@@ -10,12 +10,12 @@ const blog = {
                 {
                     id: 320,
                     content: "How to do this?",
-                    commenter: {name: "Rob", surname: "Merton"}
+                    commenter: {id: 897, name: "Rob", surname: "Merton"}
                 },
                 {
                     id: 560,
                     content: "What are you writing about?",
-                    commenter: {name: "Lee", surname: "Lui"}
+                    commenter: {id: 356, name: "Lee", surname: "Lui"}
                 }
             ]
         },
@@ -33,7 +33,7 @@ const blog = {
                 {
                     id: 210,
                     content: "How long does it take?",
-                    commenter: {name: "Alice", surname: "Jobs"}
+                    commenter: {id: 912, name: "Alice", surname: "Jobs"}
                 }
             ]
         }
