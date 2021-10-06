@@ -3,10 +3,8 @@ import {useDispatch, useSelector} from "react-redux"
 import {saveToDo, deleteToDo} from "./reducerSlices/mainReducer"
 import {v4 as uuidv4} from 'uuid'
 import {fetchTodos} from "./reducerSlices/mainReducer"
-import my_todos from "./data-todos"
-import {denormalize, normalize, schema} from 'normalizr'
-import post from "./data-post"
 import blog from "./data-blog"
+import {normalize, schema} from 'normalizr'
 
 export const DataNormalizing = () => {
     const dispatch = useDispatch()
@@ -19,63 +17,6 @@ export const DataNormalizing = () => {
         }))
         setCounter(prev => prev + 1)
     }
-    // const todosSchema = new schema.Entity('todos')
-    // // console.log(todosSchema)
-    // const normalizedData = normalize(my_todos, todosSchema)
-    const user = new schema.Entity('users');
-
-    const comment = new schema.Entity('comments', {
-        commenter: user
-    });
-
-    const article = new schema.Entity('articles', {
-        author: user,
-        comments: [comment]
-    });
-
-    const normalizedData = normalize(post, article);
-
-///////////////////////////
-    const user2 = new schema.Entity('users');
-
-    const comment2 = new schema.Entity('comments', {
-        commenter2: user2
-    });
-
-    const article2 = new schema.Entity('articles', {
-        author: user2,
-        comments: [comment2]
-    });
-
-    const normalizedData2 = normalize(post, article2);
-
-    console.log(post)
-    console.log(normalizedData)
-    console.log(normalizedData2)
-////////////////////////
-
-    const todo = new schema.Entity('todos');
-
-    const normalized = normalize(my_todos.todos, [todo]);
-
-
-    console.log(my_todos)
-    console.log(normalized)
-    console.clear()
-///////////////////////
-    console.log("initial value = ", blog)
-
-    blog.posts.forEach((item, i) => {
-        console.log("Blog Text = ", item.text)
-        console.log("Blog Author = ", item.author.name, item.author.surname)
-        console.log("*******Comments*******")
-        blog.posts[i].comments.forEach((elem, y) => {
-            console.log("*** Comment text = ", elem.content)
-            console.log("*** Comment author = ", elem.commenter.name, elem.commenter.surname)
-        })
-        console.log("//****Comments****//")
-        console.log("---------------------------------------------------------------")
-    })
 
     const _authorPost = new schema.Entity('authorPosts')
     const _commenter = new schema.Entity('commenters')
@@ -91,20 +32,22 @@ export const DataNormalizing = () => {
 
     const _normalized = normalize(blog.posts, [_post])
     console.log("result = ", _normalized)
-    // console.log(_normalized.entities.posts)
-
-    _normalized.result.forEach((item) => {
-        let post = _normalized.entities.posts[item]
-        console.log("Blog Text = ", post.text)
-    })
     console.clear()
-///////////////////////////////
-    const outData = [{id: '123', name: 'Jim'}, {id: '456', name: 'Jane'}]
-    console.log(outData)
 
-    const outUser = new schema.Entity('users')
-    const normalizedOutData = normalize(outData, [outUser])
-    console.log(normalizedOutData)
+    const changeTextComment = (data, id, newText) => {
+        if (data === null || data === undefined) return
+        const dataClone = Object.assign([], data)
+        dataClone.forEach(el => {
+            el.comments.forEach(comm => {
+                comm.content = comm.id === id ? newText : null
+            })
+        })
+        return dataClone
+    }
+
+    console.log("rawData = ", blog.posts)
+    const newObj = changeTextComment(blog.posts, 210, "My new text added!")
+    console.log("changedData =", newObj)
 
     return (
         <>
