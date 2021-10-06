@@ -39,6 +39,7 @@ export const DataNormalizing = () => {
         if (data === null || data === undefined) return
         if (!Array.isArray(data)) return
         const dataClone = _.cloneDeep(data)
+
         dataClone.forEach(el => {
             if (!el.hasOwnProperty("comments")) return
             el.comments.forEach(comm => {
@@ -47,13 +48,31 @@ export const DataNormalizing = () => {
                 comm.content = comm.id === id ? newText : comm.content
             })
         })
+
         return dataClone
     }
 
     console.log("rawData = ", blog.posts)
     const newObj = changeTextComment(blog.posts, 210, "added text !!!!")
     console.log("changedData =", newObj)
-    // ["comments", "content"]
+
+    const changeTextCommentShort = (data, id, newText) => {
+        if (data === null || data === undefined) return
+        if (data instanceof Object && Array.isArray(data)) return
+        if (newText === undefined || newText === null) return
+
+        const dataClone = _.cloneDeep(data)
+        if (!dataClone.hasOwnProperty("comments")) return
+        if (dataClone.comments[id] === undefined) return
+        dataClone.comments[id].content = newText
+
+        return dataClone
+    }
+
+    const norma = _normalized.entities
+    console.log("normalized = ", norma)
+    const newObjShort = changeTextCommentShort(norma, 210, "added text SHORT!!!!")
+    console.log(newObjShort)
 
     return (
         <>
