@@ -5,6 +5,7 @@ import {v4 as uuidv4} from 'uuid'
 import {fetchTodos} from "./reducerSlices/mainReducer"
 import blog from "./data-blog"
 import {normalize, schema} from 'normalizr'
+import * as _ from 'lodash'
 
 export const DataNormalizing = () => {
     const dispatch = useDispatch()
@@ -36,18 +37,23 @@ export const DataNormalizing = () => {
 
     const changeTextComment = (data, id, newText) => {
         if (data === null || data === undefined) return
-        const dataClone = Object.assign([], data)
+        if (!Array.isArray(data)) return
+        const dataClone = _.cloneDeep(data)
         dataClone.forEach(el => {
+            if (!el.hasOwnProperty("comments")) return
             el.comments.forEach(comm => {
-                comm.content = comm.id === id ? newText : null
+                if (!comm.hasOwnProperty("content")) return
+                if (newText === undefined || newText === null) return
+                comm.content = comm.id === id ? newText : comm.content
             })
         })
         return dataClone
     }
 
     console.log("rawData = ", blog.posts)
-    const newObj = changeTextComment(blog.posts, 210, "My new text added!")
+    const newObj = changeTextComment(blog.posts, 210, "added text !!!!")
     console.log("changedData =", newObj)
+    // ["comments", "content"]
 
     return (
         <>
