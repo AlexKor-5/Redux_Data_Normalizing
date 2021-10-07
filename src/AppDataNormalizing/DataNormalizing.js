@@ -74,6 +74,8 @@ export const DataNormalizing = () => {
     const newObjShort = changeTextCommentShort(norma, 210, "added text SHORT!!!!")
     console.log(newObjShort)
 
+    console.log("dddd")
+
     return (
         <>
             <p>Lorem ipsum dolor sit amet.</p>
